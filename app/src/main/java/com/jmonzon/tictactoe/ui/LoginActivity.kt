@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View.GONE
 import android.view.View.VISIBLE
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.jmonzon.tictactoe.databinding.ActivityLoginBinding
 

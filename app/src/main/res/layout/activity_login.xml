@@ -62,7 +62,7 @@
                 android:layout_marginTop="16dp"
                 android:backgroundTint="@color/colorPrimary"
                 android:paddingTop="16dp"
-                android:text="Iniciar sesión"
+                android:text="@string/login"
                 android:textColor="@android:color/white" />
 
             <TextView
@@ -71,7 +71,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="16dp"
-                android:text="¿Aún no estás registrado?"
+                android:text="@string/go_to_registro"
                 android:textAlignment="center"
                 android:textColor="@color/colorPrimary"
                 android:textSize="16sp" />

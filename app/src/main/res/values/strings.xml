@@ -14,4 +14,6 @@
     <string name="password">Password</string>
     <string name="email">Email</string>
     <string name="nombre">Nombre</string>
+    <string name="login">Iniciar sesión</string>
+    <string name="go_to_registro">¿Aún no estás registrado?</string>
 </resources>

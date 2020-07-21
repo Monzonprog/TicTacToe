@@ -34,7 +34,6 @@ class LoginActivity : AppCompatActivity() {
         binding.textViewToRegistro.setOnClickListener {
             val intent = Intent(this, RegistroActivity::class.java)
             startActivity(intent)
-
         }
     }
 

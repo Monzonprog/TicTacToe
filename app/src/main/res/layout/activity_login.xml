@@ -40,6 +40,7 @@
                 android:id="@+id/editTextEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
                 android:ems="10"
                 android:hint="Email"
                 android:inputType="textEmailAddress" />
@@ -48,6 +49,7 @@
                 android:id="@+id/editTextPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
                 android:ems="10"
                 android:hint="Password"
                 android:inputType="textPassword"
@@ -57,10 +59,23 @@
                 android:id="@+id/buttonLogin"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
                 android:backgroundTint="@color/colorPrimary"
                 android:paddingTop="16dp"
                 android:text="Iniciar sesión"
                 android:textColor="@android:color/white" />
+
+            <TextView
+                android:id="@+id/textViewToRegistro"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="16dp"
+                android:text="¿Aún no estás registrado?"
+                android:textAlignment="center"
+                android:textColor="@color/colorPrimary"
+                android:textSize="16sp" />
+
         </LinearLayout>
     </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

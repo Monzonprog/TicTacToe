@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import androidx.appcompat.app.AppCompatActivity
+import com.jmonzon.tictactoe.R
 import com.jmonzon.tictactoe.databinding.ActivityLoginBinding
 
 class LoginActivity : AppCompatActivity() {
@@ -27,7 +28,12 @@ class LoginActivity : AppCompatActivity() {
             var email = binding.editTextEmail.text.toString()
             var password = binding.editTextPassword.text.toString()
 
-            changeLoginFormVisibility(false)
+            when {
+                email.isEmpty() -> binding.editTextEmail.error = getText(R.string.email_vacio)
+                password.isEmpty() -> binding.editTextPassword.error =
+                    getText(R.string.password_vacio)
+                else -> changeLoginFormVisibility(false)
+            }
         }
 
         binding.textViewToRegistro.setOnClickListener {

@@ -11,4 +11,6 @@
     <string name="nombre_vacio">El nombre es obligatorio</string>
     <string name="email_vacio">El email es obligatorio</string>
     <string name="password_vacio">El password es obligatorio</string>
+    <string name="error_create_user">Error al crear el usuario</string>
+    <string name="nombre_email_pass_incorrecto">Nombre, email y/o password erroneos</string>
 </resources>

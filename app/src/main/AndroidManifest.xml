@@ -14,7 +14,7 @@
             android:name=".ui.GameActivity"
             android:label="@string/title_activity_game"
             android:theme="@style/AppTheme.NoActionBar"></activity>
-        <activity android:name=".ui.EncontrarJugadaActivity" />
+        <activity android:name=".ui.FindGameActivity" />
         <activity android:name=".ui.RegistroActivity" />
         <activity android:name=".ui.LoginActivity">
             <intent-filter>

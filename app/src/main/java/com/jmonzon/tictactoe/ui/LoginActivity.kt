@@ -69,6 +69,7 @@ class LoginActivity : AppCompatActivity() {
     private fun updateUI(user: FirebaseUser?) {
         if (user !== null) {
             val intent = Intent(this, FindGameActivity::class.java)
+            finish()
             intent.putExtra("user", user)
             startActivity(intent)
         } else {

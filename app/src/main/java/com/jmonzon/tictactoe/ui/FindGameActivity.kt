@@ -4,9 +4,9 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.jmonzon.tictactoe.R
 
-class EncontrarJugadaActivity : AppCompatActivity() {
+class FindGameActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_encontrar_jugada)
+        setContentView(R.layout.activity_find_game)
     }
 }

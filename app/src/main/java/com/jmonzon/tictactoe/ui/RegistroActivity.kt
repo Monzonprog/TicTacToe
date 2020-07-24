@@ -11,12 +11,13 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 import com.jmonzon.tictactoe.R
 import com.jmonzon.tictactoe.databinding.ActivityRegistroBinding
+import com.jmonzon.tictactoe.model.User
 
 class RegistroActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityRegistroBinding
     private lateinit var firebaseAuth: FirebaseAuth
-    private lateinit var firebaseFirestore: FirebaseFirestore
+    private lateinit var db: FirebaseFirestore
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,6 +27,7 @@ class RegistroActivity : AppCompatActivity() {
         events()
 
         firebaseAuth = FirebaseAuth.getInstance()
+        db = FirebaseFirestore.getInstance()
     }
 
     private fun events() {
@@ -49,9 +51,9 @@ class RegistroActivity : AppCompatActivity() {
         firebaseAuth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
-                    // Sign in success, update UI with the signed-in user's information
                     Log.d("RegistroActivity -> ", "createUserWithEmail:success")
                     val user = firebaseAuth.currentUser
+                    keepUserInDB(user, name)
                     updateUI(user)
                 } else {
                     // If sign in fails, display a message to the user.
@@ -65,12 +67,17 @@ class RegistroActivity : AppCompatActivity() {
             }
     }
 
+    private fun keepUserInDB(user: FirebaseUser?, name : String) {
+        val newUser = User(name, 0, 0)
+        db.collection("users")
+            .document(user?.uid!!)
+            .set(newUser)
+    }
+
     private fun updateUI(user: FirebaseUser?) {
         if (user !== null) {
-            //Save user information in Firestore
-            //TODO
-
-            //Navy to next screen
+            //Navigate  to next screen
+            finish()
             val intent = Intent(this, FindGameActivity::class.java)
             startActivity(intent)
         }

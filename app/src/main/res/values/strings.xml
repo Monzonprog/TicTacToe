@@ -16,4 +16,6 @@
     <string name="cargando">Cargando...</string>
     <string name="jugar_online">Jugar Online</string>
     <string name="show_ranking">Mostrar ranking</string>
+    <string name="buscando_partida">Buscando partida libre...</string>
+    <string name="existe_error">Se ha generado un error al unirse a la partida</string>
 </resources>

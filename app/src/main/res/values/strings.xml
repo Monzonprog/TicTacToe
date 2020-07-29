@@ -17,5 +17,8 @@
     <string name="jugar_online">Jugar Online</string>
     <string name="show_ranking">Mostrar ranking</string>
     <string name="buscando_partida">Buscando partida libre...</string>
-    <string name="existe_error">Se ha generado un error al unirse a la partida</string>
+    <string name="existe_error">Se ha generado un error con la partida</string>
+    <string name="creando_partida">Creando nueva partida...</string>
+    <string name="esperando_jugador">Esperando otro jugador</string>
+    <string name="hay_oponente">¡Ha llegado un oponente!</string>
 </resources>

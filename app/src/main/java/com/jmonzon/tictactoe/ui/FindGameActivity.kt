@@ -71,7 +71,16 @@ class FindGameActivity : AppCompatActivity() {
                         .document(playId)
                         .set(play)
                         .addOnSuccessListener(this) {
-                            startGame()
+                            binding.textViewLoading.text = getString(R.string.partida_encontrada)
+                            binding.animationView.repeatCount = 0
+                            binding.animationView.setAnimation("checked_animation.json")
+                            binding.animationView.playAnimation()
+
+                            val handler = Handler()
+                            val runnable = Runnable {
+                                startGame()
+                            }
+                            handler.postDelayed(runnable, 1500)
                         }
                         .addOnFailureListener(this) { task ->
                             changeMenuVisibility(true)
@@ -106,6 +115,9 @@ class FindGameActivity : AppCompatActivity() {
             .addSnapshotListener { value, error ->
                 if (value!!.get("playerTwoId") != "") {
                     binding.textViewLoading.text = getString(R.string.hay_oponente)
+                    binding.animationView.repeatCount = 0
+                    binding.animationView.setAnimation("checked_animation.json")
+                    binding.animationView.playAnimation()
                     val handler = Handler()
                     val runnable = Runnable {
                         startGame()

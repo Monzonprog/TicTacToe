@@ -21,4 +21,5 @@
     <string name="creando_partida">Creando nueva partida...</string>
     <string name="esperando_jugador">Esperando otro jugador</string>
     <string name="hay_oponente">¡Ha llegado un oponente!</string>
+    <string name="partida_encontrada">¡Partida encontrada! Comienza la partida</string>
 </resources>

@@ -149,18 +149,23 @@ class FindGameActivity : AppCompatActivity() {
 
     override fun onRestart() {
         super.onRestart()
-        changeMenuVisibility(true)
+        if (playId !== "") {
+            changeMenuVisibility(false)
+            waitPlayer()
+        } else {
+            changeMenuVisibility(true)
+        }
     }
 
     override fun onStop() {
         if (listenerRegistration !== null) {
             listenerRegistration?.remove()
         }
-        if(playId !== "") {
+        if (playId !== "") {
             db.collection("plays")
                 .document(playId)
                 .delete()
-                .addOnCompleteListener (this){
+                .addOnCompleteListener(this) {
                     playId = ""
                 }
         }

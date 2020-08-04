@@ -134,6 +134,7 @@ class FindGameActivity : AppCompatActivity() {
         val intent = Intent(this, GameActivity::class.java)
         intent.putExtra(Constants.EXTRA_PLAY_ID, playId)
         startActivity(intent)
+        playId = ""
     }
 
     private fun initProgressBar() {

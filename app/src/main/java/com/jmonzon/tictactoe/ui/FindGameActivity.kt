@@ -151,4 +151,19 @@ class FindGameActivity : AppCompatActivity() {
         super.onRestart()
         changeMenuVisibility(true)
     }
+
+    override fun onStop() {
+        if (listenerRegistration !== null) {
+            listenerRegistration?.remove()
+        }
+        if(playId !== "") {
+            db.collection("plays")
+                .document(playId)
+                .delete()
+                .addOnCompleteListener (this){
+                    playId = ""
+                }
+        }
+        super.onStop()
+    }
 }

@@ -63,46 +63,38 @@ class FindGameActivity : AppCompatActivity() {
                     //Don´t exist any play, create a new free play
                     createNewGame()
                 } else {
-                    var found = false
                     for (docJugada in task.result!!.documents) {
-                        if (docJugada.get("playerOneId")!!.equals(uid)) {
-                            found = true
-                            //We use the position 0 because is possible that we get a list
-                            val docPlay: DocumentSnapshot = task.result!!.documents[0]
-                            playId = docPlay.id
-                            val play: Plays? = docPlay.toObject(Plays::class.java)
-                            play!!.playerTwoId = uid
-                            db.collection("plays")
-                                .document(playId)
-                                .set(play)
-                                .addOnSuccessListener(this) {
-                                    binding.textViewLoading.text =
-                                        getString(R.string.partida_encontrada)
-                                    binding.animationView.repeatCount = 0
-                                    binding.animationView.setAnimation("checked_animation.json")
-                                    binding.animationView.playAnimation()
+                        //We use the position 0 because is possible that we get a list
+                        val docPlay: DocumentSnapshot = task.result!!.documents[0]
+                        playId = docPlay.id
+                        val play: Plays? = docPlay.toObject(Plays::class.java)
+                        play!!.playerTwoId = uid
+                        db.collection("plays")
+                            .document(playId)
+                            .set(play)
+                            .addOnSuccessListener(this) {
+                                binding.textViewLoading.text =
+                                    getString(R.string.partida_encontrada)
+                                binding.animationView.repeatCount = 0
+                                binding.animationView.setAnimation("checked_animation.json")
+                                binding.animationView.playAnimation()
 
-                                    val handler = Handler()
-                                    val runnable = Runnable {
-                                        startGame()
-                                    }
-                                    handler.postDelayed(runnable, 1500)
+                                val handler = Handler()
+                                val runnable = Runnable {
+                                    startGame()
                                 }
-                                .addOnFailureListener(this) { task ->
-                                    changeMenuVisibility(true)
-                                    Toast.makeText(
-                                        this,
-                                        getText(R.string.existe_error),
-                                        Toast.LENGTH_SHORT
-                                    )
-                                        .show()
-                                }
-                            break
-                        }
-
-                        if(!found){
-                            createNewGame()
-                        }
+                                handler.postDelayed(runnable, 1500)
+                            }
+                            .addOnFailureListener(this) { task ->
+                                changeMenuVisibility(true)
+                                Toast.makeText(
+                                    this,
+                                    getText(R.string.existe_error),
+                                    Toast.LENGTH_SHORT
+                                )
+                                    .show()
+                            }
+                        break
                     }
                 }
             }

@@ -23,4 +23,7 @@
     <string name="hay_oponente">¡Ha llegado un oponente!</string>
     <string name="partida_encontrada">¡Partida encontrada! Comienza la partida</string>
     <string name="error_to_obtain_info">Error al obtener datos de la jugada</string>
+    <string name="end_game">La partida ha terminado</string>
+    <string name="not_turn">¡Aún no es tu turno!</string>
+    <string name="select_free_box">Selecciona una casilla vacia</string>
 </resources>

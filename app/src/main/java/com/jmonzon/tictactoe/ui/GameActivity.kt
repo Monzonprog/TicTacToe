@@ -1,6 +1,9 @@
 package com.jmonzon.tictactoe.ui
 
+import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
+import android.view.View
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -93,17 +96,43 @@ class GameActivity : AppCompatActivity() {
                     plays = documentSnapshot.toObject(Plays::class.java)!!
                 }
                 if (playerOneName.isEmpty() || playerTwoName.isEmpty()) {
-                    getPlayerGames()
+                    getPlayerName()
                 }
+                updateUI()
             }
     }
 
-    private fun getPlayerGames() {
+    private fun updateUI() {
+        var x = 0
+        while (x in 0..8) {
+            val box = plays.cellSelected!![x]
+            val ivCurrentBox: ImageView = boxes[x]
+            if (box == 0) {
+                ivCurrentBox.setImageResource(R.drawable.ic_empty_square)
+            } else if (box == 1) {
+                ivCurrentBox.setImageResource(R.drawable.ic_player_one)
+            } else {
+                ivCurrentBox.setImageResource(R.drawable.ic_player_two)
+            }
+            x++
+        }
+
+        if (plays.turnPlayerOne) {
+            binding.contentGame.textViewPlayerOne.setTextColor(resources.getColor(R.color.colorPrimary))
+            binding.contentGame.textViewPlayerTwo.setTextColor(Color.BLACK)
+        } else {
+            binding.contentGame.textViewPlayerOne.setTextColor(Color.BLACK)
+            binding.contentGame.textViewPlayerTwo.setTextColor(resources.getColor(R.color.colorPrimary))
+        }
+
+    }
+
+    private fun getPlayerName() {
         //Obtain name´s player one
         db.collection("users")
             .document(plays.playerOneId.toString())
             .get()
-            .addOnSuccessListener (this) {task ->
+            .addOnSuccessListener(this) { task ->
                 playerOneName = task.get("name").toString()
                 binding.contentGame.textViewPlayerOne.text = playerOneName
             }
@@ -111,7 +140,7 @@ class GameActivity : AppCompatActivity() {
         db.collection("users")
             .document(plays.playerTwoId.toString())
             .get()
-            .addOnSuccessListener (this) {task ->
+            .addOnSuccessListener(this) { task ->
                 playerTwoName = task.get("name").toString()
                 binding.contentGame.textViewPlayerTwo.text = playerTwoName
             }
@@ -120,6 +149,51 @@ class GameActivity : AppCompatActivity() {
     override fun onStop() {
         listenerPlay.remove()
         super.onStop()
+    }
+
+    fun boxClicked(view: View) {
+        if (!plays.winnerId!!.isEmpty()) {
+            Toast.makeText(this, getString(R.string.end_game), Toast.LENGTH_SHORT).show()
+        } else {
+            if (plays.turnPlayerOne && plays.playerOneId.equals(uid)) {
+                //Player one is playing
+                updatePlays(view.tag.toString())
+            } else if (!plays.turnPlayerOne && plays.playerTwoId.equals(uid)) {
+                updatePlays(view.tag.toString())
+            } else {
+                Toast.makeText(this, getString(R.string.not_turn), Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun updatePlays(boxNumber: String) {
+        val position: Int = boxNumber.toInt()
+        if (plays.cellSelected!![position] != 0) {
+            Toast.makeText(this, R.string.select_free_box, Toast.LENGTH_SHORT).show()
+        } else {
+            if (plays.turnPlayerOne) {
+                boxes[position].setImageResource(R.drawable.ic_player_one)
+                plays.cellSelected!![position] = 1
+            } else {
+                boxes[position].setImageResource(R.drawable.ic_player_two)
+                plays.cellSelected!![position] = 2
+            }
+            changeTurn()
+            //Update Firestore with new data
+            db.collection("plays")
+                .document(playId)
+                .set(plays)
+                .addOnSuccessListener {
+                    Log.w("GameActivity Ok: ", "Jugada guardada")
+                }
+                .addOnFailureListener {
+                    Log.w("GameActivity Error: ", "Error al guardar la jugada")
+                }
+        }
+    }
+
+    private fun changeTurn() {
+        plays.turnPlayerOne = !plays.turnPlayerOne
     }
 
 }

@@ -22,7 +22,7 @@ import com.jmonzon.tictactoe.R
 import com.jmonzon.tictactoe.app.Constants
 import com.jmonzon.tictactoe.databinding.ActivityGameBinding
 import com.jmonzon.tictactoe.model.Plays
-import kotlinx.android.synthetic.main.dialog_game_over.*
+import com.jmonzon.tictactoe.model.User
 import java.util.*
 
 class GameActivity : AppCompatActivity() {
@@ -39,6 +39,8 @@ class GameActivity : AppCompatActivity() {
     private lateinit var plays: Plays
     private var playerOneName = ""
     private var playerTwoName = ""
+    private lateinit var userPlayerOne: User
+    private lateinit var userPlayerTwo: User
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -149,6 +151,7 @@ class GameActivity : AppCompatActivity() {
             .document(plays.playerOneId.toString())
             .get()
             .addOnSuccessListener(this) { task ->
+               // userPlayerOne = task.toObject(User::class.java)!!
                 playerOneName = task.get("name").toString()
                 binding.contentGame.textViewPlayerOne.text = playerOneName
             }
@@ -157,6 +160,7 @@ class GameActivity : AppCompatActivity() {
             .document(plays.playerTwoId.toString())
             .get()
             .addOnSuccessListener(this) { task ->
+                //userPlayerTwo = task.toObject(User::class.java)!!
                 playerTwoName = task.get("name").toString()
                 binding.contentGame.textViewPlayerTwo.text = playerTwoName
             }
@@ -287,12 +291,17 @@ class GameActivity : AppCompatActivity() {
         builder?.setView(view)
 
         if (plays.winnerId == "EMPATE") {
+            //updatePoints(1)
             tvInformation.text = getString(R.string.game_tie)
             tvPoints.text = getString(R.string.one_point)
         } else if (winnerId == uid) {
+
+            //updatePoints(3)
             tvInformation.text = getString(R.string.winner_text)
             tvPoints.text = getString(R.string.three_points)
         } else {
+
+            //updatePoints(0)
             tvInformation.text = getString(R.string.loser_text)
             lottieAnimation.setAnimation("thumbs_down_animation.json")
             lottieAnimation.playAnimation()
@@ -308,6 +317,26 @@ class GameActivity : AppCompatActivity() {
         dialog?.show()
 
 
+    }
+
+    private fun updatePoints(points: Int) {
+        lateinit var newUserPoints : User
+        if (playerOneName == userPlayerOne.name) {
+            userPlayerOne.points = userPlayerOne.points + points
+            newUserPoints = userPlayerOne
+        } else {
+            userPlayerTwo.points = userPlayerTwo.points + points
+            newUserPoints = userPlayerTwo
+        }
+        db.collection("users")
+            .document(uid)
+            .set(newUserPoints)
+            .addOnSuccessListener (this) {
+
+            }
+            .addOnFailureListener (this) {
+
+            }
     }
 
 }

@@ -26,4 +26,12 @@
     <string name="end_game">La partida ha terminado</string>
     <string name="not_turn">¡Aún no es tu turno!</string>
     <string name="select_free_box">Selecciona una casilla vacia</string>
+    <string name="game_over">Game Over</string>
+    <string name="exit">Salir</string>
+    <string name="game_tie">"¡Empate!"</string>
+    <string name="one_point">+1 punto</string>
+    <string name="zero_points">0 puntos</string>
+    <string name="winner_text">"¡Has ganado la partida!"</string>
+    <string name="three_points">+3 puntos</string>
+    <string name="loser_text">"¡Has perdido la partida!"</string>
 </resources>

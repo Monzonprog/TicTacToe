@@ -1,12 +1,18 @@
 package com.jmonzon.tictactoe.ui
 
+import android.content.DialogInterface
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
+import android.view.Gravity
 import android.view.View
+import android.view.animation.Animation
 import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import com.airbnb.lottie.LottieAnimationView
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -16,6 +22,7 @@ import com.jmonzon.tictactoe.R
 import com.jmonzon.tictactoe.app.Constants
 import com.jmonzon.tictactoe.databinding.ActivityGameBinding
 import com.jmonzon.tictactoe.model.Plays
+import kotlinx.android.synthetic.main.dialog_game_over.*
 import java.util.*
 
 class GameActivity : AppCompatActivity() {
@@ -27,6 +34,7 @@ class GameActivity : AppCompatActivity() {
     private lateinit var firebaseUser: FirebaseUser
     private lateinit var uid: String
     private lateinit var playId: String
+    private lateinit var winnerId: String
     private lateinit var listenerPlay: ListenerRegistration
     private lateinit var plays: Plays
     private var playerOneName = ""
@@ -99,7 +107,24 @@ class GameActivity : AppCompatActivity() {
                     getPlayerName()
                 }
                 updateUI()
+                updatePlayersUI()
             }
+    }
+
+    private fun updatePlayersUI() {
+
+        if (plays.turnPlayerOne) {
+            binding.contentGame.textViewPlayerOne.setTextColor(resources.getColor(R.color.colorPrimary))
+            binding.contentGame.textViewPlayerTwo.setTextColor(Color.BLACK)
+        } else {
+            binding.contentGame.textViewPlayerOne.setTextColor(Color.BLACK)
+            binding.contentGame.textViewPlayerTwo.setTextColor(resources.getColor(R.color.colorPrimary))
+        }
+
+        if (!plays.winnerId!!.isEmpty()) {
+            winnerId = plays.winnerId.toString()
+            showGameOverDialog()
+        }
     }
 
     private fun updateUI() {
@@ -116,15 +141,6 @@ class GameActivity : AppCompatActivity() {
             }
             x++
         }
-
-        if (plays.turnPlayerOne) {
-            binding.contentGame.textViewPlayerOne.setTextColor(resources.getColor(R.color.colorPrimary))
-            binding.contentGame.textViewPlayerTwo.setTextColor(Color.BLACK)
-        } else {
-            binding.contentGame.textViewPlayerOne.setTextColor(Color.BLACK)
-            binding.contentGame.textViewPlayerTwo.setTextColor(resources.getColor(R.color.colorPrimary))
-        }
-
     }
 
     private fun getPlayerName() {
@@ -180,9 +196,11 @@ class GameActivity : AppCompatActivity() {
             }
             if (existSolution()) {
                 plays.winnerId = uid
-            } else if (existTie()){
+                Toast.makeText(this, "Hay un ganador", Toast.LENGTH_SHORT).show()
+            } else if (existTie()) {
                 plays.winnerId = "EMPATE"
-            }else {
+                Toast.makeText(this, "Hay empate", Toast.LENGTH_SHORT).show()
+            } else {
                 changeTurn()
             }
             //Update Firestore with new data
@@ -241,8 +259,55 @@ class GameActivity : AppCompatActivity() {
         } else if (selectedCells[2] == selectedCells[4] && selectedCells[4] == selectedCells[6] && selectedCells[6] != 0) {
             exist = true
         }
-
         return exist
+    }
+
+    private fun showGameOverDialog() {
+        val builder: AlertDialog.Builder? = this.let {
+            AlertDialog.Builder(it)
+        }
+        //Use our own layout
+        val view = layoutInflater.inflate(R.layout.dialog_game_over, null)
+
+        var tvPoints: TextView = view.findViewById(R.id.textViewPoints)
+        var tvInformation: TextView = view.findViewById(R.id.textViewInformation)
+        var lottieAnimation: LottieAnimationView = view.findViewById((R.id.animation_view))
+
+        //Custom title
+        val title = TextView(this)
+        title.text = getString(R.string.game_over)
+        title.gravity = Gravity.CENTER;
+        title.setPadding(10, 10, 10, 10);
+        title.setTextColor(Color.BLACK);
+        title.textSize = 20F
+
+        builder?.setCustomTitle(title)
+        //Dialog can´t be closed if don´t push button
+        builder?.setCancelable(false)
+        builder?.setView(view)
+
+        if (plays.winnerId == "EMPATE") {
+            tvInformation.text = getString(R.string.game_tie)
+            tvPoints.text = getString(R.string.one_point)
+        } else if (winnerId == uid) {
+            tvInformation.text = getString(R.string.winner_text)
+            tvPoints.text = getString(R.string.three_points)
+        } else {
+            tvInformation.text = getString(R.string.loser_text)
+            lottieAnimation.setAnimation("thumbs_down_animation.json")
+            lottieAnimation.playAnimation()
+            lottieAnimation.repeatCount = Animation.INFINITE
+        }
+        builder?.apply {
+            setPositiveButton(R.string.exit,
+                DialogInterface.OnClickListener { dialog, id ->
+                    finish()
+                })
+        }
+        val dialog: AlertDialog? = builder?.create()
+        dialog?.show()
+
+
     }
 
 }

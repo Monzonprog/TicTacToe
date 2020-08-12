@@ -178,7 +178,13 @@ class GameActivity : AppCompatActivity() {
                 boxes[position].setImageResource(R.drawable.ic_player_two)
                 plays.cellSelected!![position] = 2
             }
-            changeTurn()
+            if (existSolution()) {
+                plays.winnerId = uid
+            } else if (existTie()){
+                plays.winnerId = "EMPATE"
+            }else {
+                changeTurn()
+            }
             //Update Firestore with new data
             db.collection("plays")
                 .document(playId)
@@ -194,6 +200,49 @@ class GameActivity : AppCompatActivity() {
 
     private fun changeTurn() {
         plays.turnPlayerOne = !plays.turnPlayerOne
+    }
+
+    private fun existTie(): Boolean {
+        var exist = false
+        var existBoxFree = false
+        var x = 0
+        while (x in 0..8) {
+            if (plays.cellSelected!![x] == 0) {
+                existBoxFree = true
+                break
+            }
+            x++
+        }
+
+        if (!existBoxFree) { //Tie
+            exist = true
+        }
+        return exist
+    }
+
+    private fun existSolution(): Boolean {
+        var exist = false
+
+        var selectedCells: List<Int> = plays.cellSelected!!
+        if (selectedCells[0] == selectedCells[1] && selectedCells[1] == selectedCells[2] && selectedCells[2] != 0) {
+            exist = true
+        } else if (selectedCells[3] == selectedCells[4] && selectedCells[4] == selectedCells[5] && selectedCells[5] != 0) {
+            exist = true
+        } else if (selectedCells[6] == selectedCells[7] && selectedCells[7] == selectedCells[8] && selectedCells[8] != 0) {
+            exist = true
+        } else if (selectedCells[0] == selectedCells[3] && selectedCells[3] == selectedCells[6] && selectedCells[6] != 0) {
+            exist = true
+        } else if (selectedCells[1] == selectedCells[4] && selectedCells[4] == selectedCells[7] && selectedCells[7] != 0) {
+            exist = true
+        } else if (selectedCells[2] == selectedCells[5] && selectedCells[5] == selectedCells[8] && selectedCells[8] != 0) {
+            exist = true
+        } else if (selectedCells[0] == selectedCells[4] && selectedCells[4] == selectedCells[8] && selectedCells[8] != 0) {
+            exist = true
+        } else if (selectedCells[2] == selectedCells[4] && selectedCells[4] == selectedCells[6] && selectedCells[6] != 0) {
+            exist = true
+        }
+
+        return exist
     }
 
 }
